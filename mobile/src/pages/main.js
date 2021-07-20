@@ -19,7 +19,7 @@ const home = () => {
                     <View style={{flexDirection: 'row'}}>
                         <TextInput
                             style={styles.contador}
-                            placeholder="Contador"
+                            placeholder="0"
                         />
                         <TouchableOpacity style={styles.zerarButton}>
                             <Text style={{fontSize: 30, color: 'white'}}>Zerar</Text>
