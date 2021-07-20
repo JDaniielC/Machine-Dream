@@ -3,20 +3,13 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Main from './src/pages/profile';
+import MainScreen from './src/pages/main';
+import SettingsScreen from './src/pages/settings';
 
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
     </View>
   );
 }
@@ -27,9 +20,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="Main" component={Main} />
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="MainScreen" component={MainScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {StyleSheet, Image, View, Text, TextInput, TouchableOpacity,} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
 
-const home = ({navigation}) => {
+const home = () => {
     return (
         <>
             <View style={{backgroundColor: '#FFFFFF', alignItems: 'center', flex: 1}}>
