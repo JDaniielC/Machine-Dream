@@ -3,8 +3,13 @@ import {StyleSheet, Image, View, Text, Switch, TouchableOpacity, StatusBar} from
 import { Fontisto, MaterialIcons } from '@expo/vector-icons';
 
 const SettingsScreen = () => {
-    const [isEnabled, setIsEnabled] = useState(true);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const [manualClick, setManualClick] = useState(false);
+    const [esteiraClick, setEsteiraClick] = useState(false);
+    const [bombaClick, setBombaClick] = useState(false);
+
+    const firstClick = () => setManualClick(previousState => !previousState);
+    const secondClick = () => setEsteiraClick(previousState => !previousState);
+    const thirtClick = () => setBombaClick(previousState => !previousState);
     
     return (
         <View style={styles.setting}>
@@ -26,9 +31,9 @@ const SettingsScreen = () => {
                 <Text style={styles.simpleText}>Usar Programação Manual</Text>
                 <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#0000FF" : "#f4f3f4"}
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    thumbColor={manualClick ? "#0000FF" : "#f4f3f4"}
+                    onValueChange={firstClick}
+                    value={manualClick}
                     style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
                 /> 
             </View>
@@ -45,9 +50,9 @@ const SettingsScreen = () => {
                     <Text style={styles.simpleText}>Mover Esteira</Text>
                     <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#0000FF" : "#f4f3f4"}
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    thumbColor={esteiraClick ? "#0000FF" : "#f4f3f4"}
+                    onValueChange={secondClick}
+                    value={esteiraClick}
                     style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
                     />
                 </View>
@@ -55,9 +60,9 @@ const SettingsScreen = () => {
                     <Text style={styles.simpleText}>Encher Bomba</Text>
                     <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#0000FF" : "#f4f3f4"}
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    thumbColor={bombaClick ? "#0000FF" : "#f4f3f4"}
+                    onValueChange={thirtClick}
+                    value={bombaClick}
                     style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
                     />
                 </View>

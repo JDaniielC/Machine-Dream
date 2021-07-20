@@ -4,8 +4,20 @@ import { Text, View, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 
 const manualScreen = () => {
     const [isEnabled, setIsEnabled] = useState(true);
+    const [clickA, setClickA] = useState(true);
+    const [clickB, setClickB] = useState(true);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     
+    var touchA = {
+        style: (clickA) ? styles.click : styles.clicked,
+        onPress: () => setClickA(previousState => !previousState)
+    }
+
+    var touchB = {
+        style: (clickB) ? styles.click : styles.clicked,
+        onPress: () => setClickB(previousState => !previousState)
+    }
+
     return (
       <View style={styles.page}>
             <View style={styles.header}>
@@ -25,7 +37,7 @@ const manualScreen = () => {
                 </View>
                 <View style={styles.option}>
                     <Text style={styles.text}>Loop da Bomba</Text>
-                    <TouchableOpacity style={styles.click}></TouchableOpacity>
+                    <TouchableOpacity {...touchA}></TouchableOpacity>
                 </View>
             </View>
 
@@ -33,7 +45,7 @@ const manualScreen = () => {
                 <Text style={styles.text}>Bomba</Text>
                 <View style={styles.option}>
                     <Text style={styles.text}>Tempo da bomba</Text>
-                    <TouchableOpacity style={styles.click}></TouchableOpacity>
+                    <TouchableOpacity {...touchB}></TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.save}><Text style={{fontSize: 30, color: 'white'}}>Salvar</Text></TouchableOpacity>
             </View>
@@ -104,6 +116,13 @@ const styles = StyleSheet.create({
 
     click: {
         backgroundColor: '#F1F1F4',
+        borderRadius: 15,
+        width: 50,
+        height: 50,
+    },
+
+    clicked: {
+        backgroundColor: 'green',
         borderRadius: 15,
         width: 50,
         height: 50,
