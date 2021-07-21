@@ -4,13 +4,36 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import MainScreen from './src/pages/main';
-import SettingsScreen from './src/pages/settings';
+import Settings from './src/pages/settings';
 import ManualScreen from './src/pages/manual';
+import LoginScreen from './src/pages/login'
 
 const Tab = createBottomTabNavigator();
 
+function SettingsScreen () {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen 
+        name="Connection"
+        component={Settings}
+        options={{
+          tabBarVisible: false
+        }} 
+      />
+      <Tab.Screen 
+        name="Login"
+        component={LoginScreen}
+        options={{
+          tabBarVisible: false
+        }} 
+      />
+    </Tab.Navigator>
+  );
+}
+
 export default function App() {
   return (
+
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen 

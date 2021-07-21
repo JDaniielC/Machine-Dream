@@ -2,15 +2,22 @@ import React, { useState, useEffect } from 'react';
 import {StyleSheet, Image, View, Text, Switch, TouchableOpacity, StatusBar} from 'react-native';
 import { Fontisto, MaterialIcons } from '@expo/vector-icons';
 
-const SettingsScreen = () => {
+const SettingsScreen = ({navigation}) => {
     const [manualClick, setManualClick] = useState(false);
     const [esteiraClick, setEsteiraClick] = useState(false);
     const [bombaClick, setBombaClick] = useState(false);
-
+    const [internet, setInternet] = useState(false);
+    const [bluet, setBluet] = useState(false);
+    const {navigate} = navigation;
     const firstClick = () => setManualClick(previousState => !previousState);
     const secondClick = () => setEsteiraClick(previousState => !previousState);
     const thirtClick = () => setBombaClick(previousState => !previousState);
-    
+    const connectionA = () => {
+        navigate('Login')
+        setInternet(previousState => !previousState)
+    };
+    const connectionB = () => setBluet(previousState => !previousState);
+
     return (
         <View style={styles.setting}>
             <View style={styles.header}>
@@ -21,8 +28,20 @@ const SettingsScreen = () => {
                 <View style={{justifyContent: 'center'}}>
                 <Text style={styles.simpleText}>Tipo de Conexão</Text>
                 <View style={styles.connections}>
-                    <Fontisto name="world-o" size={40} color="black" />
-                    <MaterialIcons name="bluetooth-searching" size={41}/>
+                    <Fontisto.Button 
+                        name="world-o" 
+                        size={40} 
+                        color= {internet ? "black" : "blue"}
+                        onPress={connectionA}
+                        backgroundColor='white'
+                    />
+                    <MaterialIcons.Button
+                        name="bluetooth-searching" 
+                        size={41}
+                        color= {bluet ? "black" : "blue"}
+                        onPress={connectionB}
+                        backgroundColor='white'
+                    />
                 </View>
                 </View>
                 <View></View>
