@@ -1,60 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import {StyleSheet, Image, View, Text, TextInput, TouchableHighlight, TouchableOpacity} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
+import api from '../services/api';
+
+const bottleImg = require('../assets/bottle.gif');
+const esteiraImg = require('../assets/esteira.gif');
+const offImg = require('../assets/off.png');
+let pooling = null;
 
 const home = () => {
-    var [ isPress, setIsPress ] = useState(true);
+    const [isRunning, setIsRunning] = useState(false);
+    const [imgSource, setImgSource] = useState(offImg);
+    const [imgStyle, setImgStyle] = useState(styles.off);
+    const [status, setStatus] = useState(0);
     const [count, setCount] = useState(0);
 
-    var touchProps = {
+    async function verifyStatus() {
+        const { data } = await api.get('/api/status/');
+        setStatus(data.status);
+        setCount(data.count);
+    }
+    useEffect(() => {
+        async function verifyIsRunning() {
+            const { data } = await api.get('/api/control/');
+            setIsRunning(data.status);
+        }
+
+        verifyIsRunning();
+        clearInterval(pooling);
+        pooling = setInterval(verifyStatus, 50000);
+    }, []);
+    
+    useEffect(() => {
+        let result = { style: styles.off, source: offImg };
+        if (isRunning) {
+            if (status == 1) {
+                result.source = esteiraImg;
+                result.style = styles.esteira;
+            } else if (status == 2) {
+                result.source = bottleImg;
+                result.style = styles.bottle;
+            } 
+        }
+        setImgSource(result.source);
+        setImgStyle(result.style);
+    }, [status])
+
+    async function toggleRunning() {
+        await api.post('/api/control/');
+        clearInterval(pooling);
+        if (!isRunning) {
+            pooling = setInterval(verifyStatus, 5000);
+        }
+        setIsRunning(!isRunning);
+    }
+
+    var turnTouch = {
         activeOpacity:  1,
         underlayColor: "red",
-        style: isPress ? styles.turnOff : styles.turnOn, 
-        onPress: () => setIsPress(previousState => !previousState, setCount(count + 1)),
+        style: isRunning ? styles.turnOn : styles.turnOff, 
+        onPress: toggleRunning,
     };
 
-    var touchPropsA = {
-        onPress: () => setCount(0),
+    var resetTouch = {
+        onPress: async () => {
+            setCount(0)
+            await api.post('/api/statistics/')
+        },
         style: styles.zerarButton
     }
-    
-    var propsB = {
-        style: isPress ? styles.esteira : styles.bottle,
-        source: isPress ? require('../assets/esteira.gif') : require('../assets/bottle.gif')
-    }
 
-    var text = (isPress) ? 'Iniciar' : 'Parar';
+    var text = (isRunning) ? 'Parar' : 'Iniciar';
 
     return (
-        <>
-            <View style={{backgroundColor: '#FFFFFF', alignItems: 'center', flex: 1}}>
-                <View style={styles.map}>
-                    <Image source={require('./logo.png')} style={styles.logo} />
-                </View>
-    
-                <View style={styles.rectangle}>
-                    <MaterialIcons name="bluetooth-searching"style={styles.bluetooth}size={41}/>
-                    <Image {...propsB}/>
-                </View>
-    
-                <View style={styles.contBox}>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={styles.contador}>
-                            <Text style={styles.simpleText}>
-                                {count ? count : 0}
-                            </Text>
-                        </View>
-                        <TouchableOpacity {...touchPropsA}>
-                            <Text style={{fontSize: 30, color: 'white'}}>Zerar</Text>
-                        </TouchableOpacity>
-                    </View>
-                    
-                    <TouchableHighlight {...touchProps}>
-                        <Text style={{fontSize: 60, color: 'white'}}>{text}</Text>
-                    </TouchableHighlight>
-                </View>
+        <View style={{backgroundColor: '#FFFFFF', alignItems: 'center', flex: 1}}>
+            <View style={styles.map}>
+                <Image source={require('./logo.png')} style={styles.logo} />
             </View>
-        </>
+
+            <View style={styles.rectangle}>
+                <MaterialIcons name="bluetooth-searching"style={styles.bluetooth}size={41}/>
+                <Image style = {imgStyle} source = {imgSource}/>
+            </View>
+
+            <View style={styles.contBox}>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.contador}>
+                        <Text style={styles.simpleText}>
+                            {count ? count : 0}
+                        </Text>
+                    </View>
+                    <TouchableOpacity {...resetTouch}>
+                        <Text style={{fontSize: 30, color: 'white'}}>Zerar</Text>
+                    </TouchableOpacity>
+                </View>
+                
+                <TouchableHighlight {...turnTouch}>
+                    <Text style={{fontSize: 60, color: 'white'}}>{text}</Text>
+                </TouchableHighlight>
+            </View>
+        </View>
     );
 };
 
@@ -76,15 +121,20 @@ const styles = StyleSheet.create({
     rectangle: {
         marginTop: 80,
         alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            backgroundColor: '#F1F1F4',
-            width: 306,
-            height: 192,
-            borderRadius: 17,
-            position: 'absolute'
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        backgroundColor: '#F1F1F4',
+        width: 306,
+        height: 192,
+        borderRadius: 17,
+        position: 'absolute'
     },
     
+    off: {
+        width: 100,
+        height: 180
+    },
+
     bottle: {
         marginTop: 10,
         width: 60,

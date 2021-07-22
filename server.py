@@ -12,15 +12,22 @@ class Servidor():
         self.password = "admin"
         self.user = "admin"
 
+    def statistics(self):
+        if request.method == "POST":
+            self.count = 0    
+        return { "status": self.count}
+
     def control(self):
         if request.method == "POST":
             self.turn = not self.turn
+            if self.turn == True:
+                self.state = 1
         return { "status": self.turn }
     
     def status(self):
         if request.method == "POST":
             self.state = request.get_json()["status"]
-            if self.state == "terminado":
+            if self.state == 2:
                 self.count += 1
         return { "status": self.state, "count": self.count }
 
@@ -38,6 +45,7 @@ if __name__ == "__main__":
     app.add_url_rule('/api/control/', view_func = server.control, methods = methods)
     app.add_url_rule('/api/status/', view_func = server.status, methods=methods)
     app.add_url_rule('/api/login/', view_func = server.login, methods = methods)
+    app.add_url_rule('/api/statistics/', view_func = server.statistics, methods = methods)
 
     app.run(host='0.0.0.0', debug = True, port = 5000)
 
