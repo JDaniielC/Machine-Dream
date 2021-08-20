@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {StyleSheet, Image, View, Text, TextInput, TouchableHighlight, TouchableOpacity} from 'react-native';
-import {MaterialIcons} from '@expo/vector-icons';
+import {MaterialIcons, Fontisto} from '@expo/vector-icons';
 import api from '../services/api';
 
 const bottleImg = require('../assets/bottle.gif');
@@ -14,6 +14,8 @@ const home = () => {
     const [imgStyle, setImgStyle] = useState(styles.off);
     const [status, setStatus] = useState(0);
     const [count, setCount] = useState(0);
+    const [showInternet, setShowInternet] = useState(false);
+    const [showBluetooth, setShowBluetooth] = useState(false);
 
     async function verifyStatus() {
         const { data } = await api.get('/api/status/');
@@ -47,7 +49,19 @@ const home = () => {
     }, [status])
 
     async function toggleRunning() {
-        await api.post('/api/control/');
+        await api.post('/api/control/')
+        .then(async () => {
+            const { data } = await api.get('/api/connection/')
+            let result = data.status
+            if (result == "bluetooth") {
+                setShowBluetooth(!showBluetooth);
+            } else if (result == "internet") {
+                setShowInternet(!showInternet);
+            } else {
+                setShowInternet(false);
+                setShowBluetooth(false);
+            }
+        });
         clearInterval(pooling);
         if (!isRunning) {
             pooling = setInterval(verifyStatus, 5000);
@@ -79,7 +93,18 @@ const home = () => {
             </View>
 
             <View style={styles.rectangle}>
-                <MaterialIcons name="bluetooth-searching"style={styles.bluetooth}size={41}/>
+                {showInternet ? 
+                    <Fontisto 
+                        name="world-o" 
+                        size={40} 
+                        style={styles.bluetooth}
+                    /> : null}
+                {showBluetooth ?
+                    <MaterialIcons 
+                        name="bluetooth-searching"
+                        style={styles.bluetooth}
+                        size={41}
+                    /> : null}
                 <Image style = {imgStyle} source = {imgSource}/>
             </View>
 

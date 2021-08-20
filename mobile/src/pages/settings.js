@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {StyleSheet, Image, View, Text, Switch, TouchableOpacity, StatusBar} from 'react-native';
 import { Fontisto, MaterialIcons } from '@expo/vector-icons';
+import api from '../services/api';
 
 const SettingsScreen = ({navigation}) => {
     const [manualClick, setManualClick] = useState(false);
@@ -9,6 +10,7 @@ const SettingsScreen = ({navigation}) => {
     const [internet, setInternet] = useState(false);
     const [bluet, setBluet] = useState(false);
     const {navigate} = navigation;
+    
     const firstClick = () => setManualClick(previousState => !previousState);
     const secondClick = () => setEsteiraClick(previousState => !previousState);
     const thirtClick = () => setBombaClick(previousState => !previousState);

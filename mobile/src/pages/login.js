@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import {StyleSheet, Image, View, Text, TextInput, TouchableOpacity} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import api from '../services/api';
 
 const Login = ({navigation}) => {
     const {navigate} = navigation;
-    
+    const [user, setUser] = useState(null);
+    const [password, setPassword] = useState(null);
+    // const [enter, setEnter] = useState(false);
+
     var touchProps = {
         style: styles.acess,
+        onPress: async () => {
+            await api.post('/api/login/', {user, password})
+            // .then(function (response) {
+            //     console.log(response);
+            //   })
+            //   .catch(function (error) {
+            //     console.log(error);
+            // });
+        }
     }
 
     const backBottom = () => {
@@ -25,8 +38,19 @@ const Login = ({navigation}) => {
             <View style={styles.box}>
                 <Image source={require('../assets/logo.png')} style={styles.logo} />
                 <View style={styles.first}>
-                    <TextInput style={styles.input} placeholder='Usuário' />
-                    <TextInput style={styles.input} placeholder='Senha' secureTextEntry={true}/>
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder='Usuário' 
+                        value={user}
+                        onChangeText={(value) => {setUser(value)}}
+                        />
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder='Senha' 
+                        secureTextEntry={true}
+                        value = {password}
+                        onChangeText = {(value) => {setPassword(value)}}
+                    />
                     <TouchableOpacity {...touchProps}>
                         <Text style={{fontSize: 30}}>Entrar</Text>
                     </TouchableOpacity>
