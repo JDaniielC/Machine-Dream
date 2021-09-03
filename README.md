@@ -1,6 +1,6 @@
 # Mobile-Project
 
-![home image](.github/image2.png)
+![home image](./.github/img1.png)
 ## Motivação
     Práticar os conhecimentos adquiridos sobre React Native
 ## Tecnologias
@@ -11,7 +11,7 @@
 - Flask
 
 <p align="center">
-    <img alt="Imagem" src=".github/image2.png" width="100%">
+    <img alt="Imagem" src="./.github/imag2.png" width="100%">
 </p>
 
 ## Instalação de depedências
